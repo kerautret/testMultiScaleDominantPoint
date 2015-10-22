@@ -15,8 +15,8 @@ vector<AlphaThickSegmentComputer2D> blurredSegmentCurveDecomposition(const vecto
     for (vector<Point>::const_iterator it = aContour.begin();it != aContour.end();it++)
     {
         //cout<<*it<<endl;
-        AlphaThickSegmentComputer2D aSegment;
-        aSegment.init(it,thickness);
+      AlphaThickSegmentComputer2D aSegment(thickness);
+        aSegment.init(it);
         /* travel over the contour points and add to the seg */
         //if(aSegment.end() != aContour.end()) aSegment.extendFront();
         while (aSegment.end() != aContour.end() && aSegment.extendFront()){}
