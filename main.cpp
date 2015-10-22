@@ -28,7 +28,7 @@ int main(int argc, char *const *argv)
  ("help,h", "display this message")
  ("input,i", po::value<std::string>(), "input contour basename (without sdp extension).")
  ("imageneDir,d", po::value<std::string>(), "specify the imagene dir.")
- ("output,o", po::value<std::string>(), "output basename.");
+   ("output,o", po::value<std::string>()->default_value("./"), "output dir (default ./).");
 
 
   bool parseOK=true;
@@ -53,13 +53,23 @@ int main(int argc, char *const *argv)
     /********** read data ***************/
   stringstream fileContour;
   string baseInputName  = vm["input"].as<std::string>(); 
+  string outDir  = vm["output"].as<std::string>(); 
+  string singleName = baseInputName.substr(baseInputName.find_last_of("/")+1);
+  std::string outputExt = baseInputName.substr(baseInputName.find_last_of(".")+1);
+  if(outputExt != "sdp"){
+    trace.error() << "input file should be sdp file" << std::endl;
+    return 1;
+  }
+  singleName = singleName.substr(0, singleName.find_last_of("."));
+
+  trace.info() << singleName << std::endl;
   string ImaGeneDIR = vm["imageneDir"].as<std::string>();
-  fileContour << baseInputName << ".sdp" ;
+  fileContour << baseInputName ;
   vector<Point> aContourTmp = readFile(fileContour.str().c_str(),1);
   
     
   fileContour.str("");  
-  fileContour << baseInputName << ".dat" ; 
+  fileContour << outDir << "/" << singleName << ".dat" ; 
   writeFile(aContourTmp, fileContour.str().c_str(), true);
   vector<Point> aContour = readFile(fileContour.str().c_str(),true);
   cout<<fileContour.str()<<endl;
@@ -71,7 +81,7 @@ int main(int argc, char *const *argv)
   stringstream fileContourFC;
   FreemanChain<Z2i::Integer> fcContour (aContour);
   fileContourFC.str("");  
-  fileContourFC << baseInputName << ".fc" ; 
+  fileContourFC << outDir << "/" << singleName << ".fc" ; 
   
   std::ofstream out(fileContourFC.str().c_str());
   fcContour.selfDisplay(out);
@@ -83,9 +93,9 @@ int main(int argc, char *const *argv)
      std::stringstream instruction;
     /* meaningful thickness */
      std::stringstream noiseLevelMTFile;
-     noiseLevelMTFile << baseInputName << "MeanThickness.txt";
+     noiseLevelMTFile << outDir << "/" << singleName << "MeanThickness.txt";
      std::stringstream  smoothContourFile;
-     smoothContourFile << baseInputName << "SmoothContour.txt";
+     smoothContourFile << outDir << "/"<< singleName << "SmoothContour.txt";
      instruction << ImaGeneDIR << "/build/tests/TestCompNoiseDetect/displayNoiseBS -srcPolygon " << fileContour.str() 
                  << " 0 1 CLOSED -exportNoiseLevel "<< noiseLevelMTFile.str() 
                  << " -displaySmoothContour " << smoothContourFile.str()  ;
@@ -96,7 +106,7 @@ int main(int argc, char *const *argv)
      cout<<"File : "<<baseInputName <<" => globalNoise (meaningful thickness) = "<<glNoise<<endl;
     //colorate points by its meaningful thickness
      stringstream fileColorMT; 
-     fileColorMT << baseInputName << "_Color.svg";
+     fileColorMT << outDir << "/"<< singleName  << "_Color.svg";
 
      drawMeaningfulValue(aContour,vecMT, fileColorMT.str().c_str());
 
@@ -113,7 +123,7 @@ int main(int argc, char *const *argv)
     /******** Adaptive tangent cover ***********/
     vector<AlphaThickSegmentComputer2D> adaptiveTangentCover;
     stringstream fileAdaptMT;
-    fileAdaptMT << baseInputName<< "ATC";
+    fileAdaptMT << outDir<< "/"<< singleName<< "ATC";
     bool verbose = false;
 
     adaptiveTangentCover = testAdaptiveTangentCover(aContour,vecMT,fileAdaptMT.str().c_str(),verbose);
@@ -125,7 +135,7 @@ int main(int argc, char *const *argv)
     /******** Dominant point detection with the adaptive tangent cover cover ******/
     vector<Point> DP;
     stringstream filenameDP;
-    filenameDP << baseInputName << "_DP.svg";
+    filenameDP << outDir << "/" << singleName << "_DP.svg";
     bool isClosed = false;
     bool isSymmetry = false;
 
@@ -152,7 +162,7 @@ int main(int argc, char *const *argv)
     
     /********** Selection of dominant points ***************/
     stringstream filenameDPnew;
-    filenameDPnew << baseInputName << "_DPnew.svg";
+    filenameDPnew << outDir<< "/" << singleName << "_DPnew.svg";
     vector<Point> newDP = testDominantPointSelectionV2(DP,indexDP,aContour,
                                                        isClosed,filenameDPnew.str().c_str(),verbose); // ISE * ANGLE
     cout<<"===> New num of dominant points is "<<newDP.size()<<endl;
@@ -178,7 +188,7 @@ int main(int argc, char *const *argv)
     vector<AlphaThickSegmentComputer2D> fuzzySegmentSetMid = blurredSegmentCurveDecomposition(aContour,thickness,NULL,false);
     vector<Point> DPM;
     stringstream filenameDPM;
-    filenameDPM << baseInputName << "_DPM.svg";
+    filenameDPM << outDir << "/" << singleName  << "_DPM.svg";
    
     //cout<<"===> Num of seg decomposed is "<<fuzzySegmentSetMid.size()<<endl;
     DPM = testDominantPointOnShape(fuzzySegmentSetMid,aContour,isSymmetry,isClosed,
@@ -202,7 +212,7 @@ int main(int argc, char *const *argv)
     /********** Selection of dominant points ***************/
 
     stringstream filenameDPnewV;
-    filenameDPnewV << baseInputName << "_DPnewV.svg";
+    filenameDPnewV << outDir << "/" << singleName << "_DPnewV.svg";
 
     vector<Point> newDPM = testDominantPointSelectionV2(DPM,indexDPM,aContour,isClosed,
                                                         filenameDPnewV.str().c_str(),verbose); // ISE * ANGLE
