@@ -645,7 +645,7 @@ void drawMultiThicknessCover(const vector<Point>& aContour, const vector<vector<
     aBoard.saveSVG(filename);
 }
 
-void drawMeaningfulValue(const vector<Point>& aContour, const vector<double> vecMeanVal, char* filename)
+void drawMeaningfulValue(const vector<Point>& aContour, const vector<double> vecMeanVal, const char* filename)
 {
     Board2D aBoard;
     aBoard << SetMode("PointVector", "Both");
