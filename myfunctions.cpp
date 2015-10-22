@@ -1,5 +1,15 @@
 #include "myfunctions.h"
 
+double sort_increase(double a, double b)
+{
+    return a<b;
+}
+
+double sort_decrease(double a, double b)
+{
+    return a>b;
+}
+
 int max(int n, int m)
 {
     return n>m ? n:m;
@@ -227,9 +237,9 @@ int findElement(const vector<Point>& vec, Point p, int start)
         if(vec.at(it)==p)
             return it;
     //if(it==vec.size())
-        for(it = 0; it<start; it++)
-            if(vec.at(it)==p)
-                return vec.size()+it;
+    for(it = 0; it<start; it++)
+        if(vec.at(it)==p)
+            return vec.size()+it;
     return -1;
 }
 
@@ -242,13 +252,27 @@ int findElement(const vector<PointD>& vec, PointD p)
         return -1;
 }
 
+int findElement(const vector<PointD>& vec, PointD p, int start)
+{
+    int it;
+    for(it = start; it<vec.size(); it++)
+        if(vec.at(it)==p)
+            return it;
+    //if(it==vec.size())
+    for(it = 0; it<start; it++)
+        if(vec.at(it)==p)
+            return vec.size()+it;
+    return -1;
+}
+
+/*
 int findStartElement(const vector<Point>& vec, const AlphaThickSegmentComputer2D s)
 {
     Point pStart = getStartPoint(s);
     vector<Point>::const_iterator it = find(vec.begin(),vec.end(),pStart);
     if(it != vec.end())
         return (it-vec.begin());
-   return -1;
+    return -1;
 }
 
 int findEndElement(const vector<Point>& vec, const AlphaThickSegmentComputer2D s)
@@ -270,7 +294,7 @@ int findEndElement(const vector<Point>& vec, const AlphaThickSegmentComputer2D s
     }
     return indexEnd;
 }
-
+*/
 
 double distancePoints(Point p1, Point p2)
 {
@@ -344,8 +368,8 @@ double relativeAngle(Point p1, Point p2, Point p3)
         return M_PI/2;
     if(fabs(c-a-b)<1e-6)
         return M_PI;
-   //ac=(c*c-a*a-b*b)/(-2*a*b);
-   return acos(ac/(-2*a*b));
+    //ac=(c*c-a*a-b*b)/(-2*a*b);
+    return acos(ac/(-2*a*b));
 }
 
 /*
@@ -861,8 +885,6 @@ bool comparisonPoint(Point i, Point j)
     return i<j;
 }
 
-
-
 double getShapeDetail(const vector<Point>& contour)
 {
     /*
@@ -1008,6 +1030,11 @@ vector<Point> readFile(const char* filename, bool header)
                 vector<Point>::const_iterator it = find(P.begin(),P.end(),point);
                 if(it == P.end())
                     P.push_back(point);
+                else
+                {
+                    P.push_back(point);
+                    cout<<"repeated point "<<point<<endl;
+                }
                 count++;
             }
         }
@@ -1020,6 +1047,11 @@ vector<Point> readFile(const char* filename, bool header)
                 vector<Point>::const_iterator it = find(P.begin(),P.end(),point);
                 if(it == P.end())
                     P.push_back(point);
+                else
+                {
+                    P.push_back(point);
+                    cout<<"repeated point "<<point<<endl;
+                }
                 count++;
             }
         }
@@ -1045,10 +1077,16 @@ vector<Point> readFileInverse(const char* filename, bool header)
             while (count<nbPoint)
             {
                 myfile >> x >> y;
+                //P.push_back(Point((int)x,(int)y));
                 Point point = Point((int)x,(int)y);
                 vector<Point>::const_iterator it = find(P.begin(),P.end(),point);
                 if(it == P.end())
                     P.insert(P.begin(),point);
+                else
+                {
+                    P.insert(P.begin(),point);
+                    cout<<"repeated point "<<point<<endl;
+                }
                 count++;
             }
         }
@@ -1056,10 +1094,16 @@ vector<Point> readFileInverse(const char* filename, bool header)
         {
             while(myfile >> x >> y)
             {
+                //P.push_back(Point((int)x,(int)y));
                 Point point = Point((int)x,(int)y);
                 vector<Point>::const_iterator it = find(P.begin(),P.end(),point);
                 if(it == P.end())
                     P.insert(P.begin(),point);
+                else
+                {
+                    P.insert(P.begin(),point);
+                    cout<<"repeated point "<<point<<endl;
+                }
                 count++;
             }
         }
@@ -1090,6 +1134,11 @@ vector<Point> readFile(const char* filename, int header)
             vector<Point>::const_iterator it = find(P.begin(),P.end(),point);
             if(it == P.end())
                 P.push_back(point);
+            else
+            {
+                P.push_back(point);
+                cout<<"repeated point "<<point<<endl;
+            }
             count++;
         }
         myfile.close();
@@ -1101,200 +1150,6 @@ vector<Point> readFile(const char* filename, int header)
 }
 
 //return global
-double readMeanindfulFile(const char* filename)
-{
-    vector<Point> P;
-    vector<int> indexP;
-    vector<int> meaningScale;
-    ifstream myfile (filename);
-    string lineTmp;
-    double gobalNoise = -1;
-    if (myfile.is_open())
-    {
-        int count=0;
-        //idx noiselvl code x y
-        int i=0,m=0,c=0,x=0,y=0;
-        std::getline(myfile, lineTmp);//ignore the first two lines
-        std::getline(myfile, lineTmp);
-        while(myfile >> i >> m >> c >> x >> y)//idx noiselvl code x y
-        {
-            Point point = Point((int)x,(int)y);
-            //vector<Point>::const_iterator it = find(P.begin(),P.end(),point);
-            //if(it == P.end())
-                P.push_back(point);
-            indexP.push_back(i);
-            meaningScale.push_back(m);
-            count++;
-        }
-        myfile.close();
-        gobalNoise = std::accumulate(std::begin(meaningScale), std::end(meaningScale), 0.0);
-        gobalNoise =  gobalNoise / meaningScale.size();
-        //cout<<count<<" points are read and globalNoise = "<<gobalNoise<<endl;
-        cout<<count<<" points are read "<<endl;
-    }
-    else cout << "Unable to open file " <<filename;
-
-    return gobalNoise;
-}
-
-void writeFile(const vector<int>& v, const char* filename, bool header)
-{
-    int count = 0;
-    ofstream myfile (filename);
-    if (myfile.is_open())
-    {
-        if(header)
-            myfile << v.size();
-        for(vector<int>::const_iterator it = v.begin(); it != v.end(); it++)
-        {
-            myfile <<count<<" "<<*it<<endl;
-            count++;
-        }
-        myfile.close();
-        //cout<<count<<" points are written"<<endl;
-    }
-    else cout << "Unable to open file " <<filename;
-}
-
-void writeFile(const vector<double>& v, const char* filename, bool header)
-{
-    int count = 0;
-    ofstream myfile (filename);
-    if (myfile.is_open())
-    {
-        if(header)
-            myfile << v.size();
-        for(vector<double>::const_iterator it = v.begin(); it != v.end(); it++)
-        {
-            myfile <<count<<" "<<*it<<endl;
-            count++;
-        }
-        myfile.close();
-        //cout<<count<<" points are written"<<endl;
-    }
-    else cout << "Unable to open file " <<filename;
-}
-
-void writeFile(const vector<int>& index_v, const vector<double>& v, const char* filename, bool header)
-{
-    int count = 0;
-    ofstream myfile (filename);
-    if (myfile.is_open())
-    {
-        if(header)
-            myfile << v.size();
-        for(int i = 0; i<index_v.size(); i++)
-        {
-            myfile <<index_v.at(i)<<" "<<v.at(i)<<endl;
-            count++;
-        }
-        myfile.close();
-        //cout<<count<<" points are written"<<endl;
-    }
-    else cout << "Unable to open file " <<filename;
-}
-
-void writeFile(const vector<Point>& v, const char* filename, bool header)
-{
-    int count = 0;
-    ofstream myfile (filename);
-    if (myfile.is_open())
-    {
-        if(header)
-            myfile << v.size();
-        for(vector<Point>::const_iterator it = v.begin(); it != v.end(); it++)
-        {
-            //myfile <<count<<" "<<(*it)[0]<<" "<<(*it)[1]<<endl;
-            myfile <<(*it)[0]<<" "<<(*it)[1]<<endl;
-            count++;
-        }
-        myfile.close();
-        //cout<<count<<" points are written"<<endl;
-    }
-    else cout << "Unable to open file " <<filename;
-}
-
-void writeFile(const vector<PointD>& v, const char* filename, bool header)
-{
-    int count = 0;
-    ofstream myfile (filename);
-    if (myfile.is_open())
-    {
-        if(header)
-            myfile << v.size();
-        for(vector<PointD>::const_iterator it = v.begin(); it != v.end(); it++)
-        {
-            //myfile <<count<<" "<<(*it)[0]<<" "<<(*it)[1]<<endl;
-            myfile <<(*it)[0]<<" "<<(*it)[1]<<endl;
-            count++;
-        }
-        myfile.close();
-        //cout<<count<<" points are written"<<endl;
-    }
-    else cout << "Unable to open file " <<filename;
-}
-
-vector<int> sortIndex(vector<double> const& values, bool isIncrease)
-{
-    vector<int> indices(values.size());
-    std::iota(begin(indices), end(indices), static_cast<int>(0));
-
-    if(isIncrease)
-        std::sort( begin(indices), end(indices), [&](int a, int b) { return values[a] < values[b]; } );
-    else//decrease
-        std::sort( begin(indices), end(indices), [&](int a, int b) { return values[a] > values[b]; } );
-    return indices;
-}
-
-vector<int> absSortIndex(vector<double> const& values, bool isIncrease)
-{
-    vector<int> indices(values.size());
-    std::iota(begin(indices), end(indices), static_cast<int>(0));
-
-    if(isIncrease)
-        std::sort( begin(indices), end(indices), [&](int a, int b) { return fabs(values[a]) < fabs(values[b]); } );
-    else//decrease
-        std::sort( begin(indices), end(indices), [&](int a, int b) { return fabs(values[a]) > fabs(values[b]); } );
-    return indices;
-}
-
-vector<int> sortIndex(vector<int> const& values, bool isIncrease)
-{
-    vector<int> indices(values.size());
-    std::iota(begin(indices), end(indices), static_cast<int>(0));
-
-    if(isIncrease)
-        std::sort( begin(indices), end(indices), [&](int a, int b) { return values[a] < values[b]; } );
-    else//decrease
-        std::sort( begin(indices), end(indices), [&](int a, int b) { return values[a] > values[b]; } );
-    return indices;
-}
-
-int signeInt(int n)
-{
-    if(n<0)
-        return -1;
-    if(n>0)
-        return 1;
-    return 0;
-}
-
-/* signe of vector */
-Point directionOfVector(Point N, Point startS, Point endS)
-{
-    Point N_tmp = N;
-    int signNx = 1, signNy=1;
-    signNx = signeInt(endS[0] - startS[0]);
-    signNy = signeInt(endS[1] - startS[1]);
-    //N : vector normal => (Nx, Ny)
-    //vector of direction => (Ny, -Nx) or (-Ny, Nx)
-    if(N[1]*signNx>0) N_tmp[1] = -N[1];
-    //if(signNx!= 0) N_tmp[1] = signNx*N[1];
-    if(N[0]*signNy<0) N_tmp[0] = -N[0];
-    //if(signNy!=0) N_tmp[0] = -signNy*N[0];
-    return N_tmp;
-}
-
 vector<int> readMeanindfulScaleFile(const char* filename)
 {
     vector<int> P;
@@ -1361,4 +1216,255 @@ double getGlobalNoise(const vector<double>& vect)
     globalNoise =  globalNoise / vect.size();
 
     return globalNoise;
+}
+
+vector<double> findVectorElement(const vector<double>& vect)
+{
+    vector<double> vectElement;
+    vectElement.push_back(vect.front());
+    for(vector<double>::const_iterator it = vect.begin()+1; it != vect.end(); it++)
+    {
+        double m = (*it);
+        if (std::find(vectElement.begin(), vectElement.end(),m)==vectElement.end())
+            vectElement.push_back(m);
+    }
+    std::sort(vectElement.begin(),vectElement.end(),sort_increase);
+
+    return vectElement;
+}
+
+bool isRegularNoise(const vector<double>& vect, double dominantRate)
+{
+    vector<double> rateElement;
+    vector<double> vectElement = findVectorElement(vect);
+    for(vector<double>::const_iterator it = vectElement.begin(); it != vectElement.end(); it++)
+    {
+        int nbElt = std::count(vect.begin(), vect.end(), *it);
+        rateElement.push_back(nbElt/vect.size());
+    }
+    for(vector<double>::const_iterator it = rateElement.begin(); it != rateElement.end(); it++)
+    {
+        if((*it)>dominantRate)
+            return true;
+    }
+    return false;
+}
+
+vector<PointD> readSmoothContourFile(const char* filename)
+{
+    vector<PointD> P;
+    ifstream myfile (filename);
+    string lineTmp;
+    if (myfile.is_open())
+    {
+        int count=0;
+        // Format X Y
+        double m=0,x=0,y=0;
+        std::getline(myfile, lineTmp);//ignore the first two lines
+        std::getline(myfile, lineTmp);
+        while(myfile >> x >> y)// X Y
+        {
+            PointD point = PointD((double)x,(double)y);
+            P.push_back(point);
+            count++;
+        }
+        myfile.close();
+        cout<<count<<" points are read "<<endl;
+    }
+    else cout << "Unable to open file " <<filename;
+
+    return P;
+}
+
+void writeFile(const vector<int>& v, const char* filename, bool header)
+{
+    int count = 0;
+    ofstream myfile (filename);
+    if (myfile.is_open())
+    {
+        if(header)
+            myfile << v.size();
+        for(vector<int>::const_iterator it = v.begin(); it != v.end(); it++)
+        {
+            myfile <<count<<" "<<*it<<endl;
+            count++;
+        }
+        myfile.close();
+        //cout<<count<<" points are written"<<endl;
+    }
+    else cout << "Unable to open file " <<filename;
+}
+
+void writeFile(const vector<double>& v, const char* filename, bool header)
+{
+    int count = 0;
+    ofstream myfile (filename);
+    if (myfile.is_open())
+    {
+        if(header)
+            myfile << v.size();
+        for(vector<double>::const_iterator it = v.begin(); it != v.end(); it++)
+        {
+            myfile <<count<<" "<<*it<<endl;
+            count++;
+        }
+        myfile.close();
+        //cout<<count<<" points are written"<<endl;
+    }
+    else cout << "Unable to open file " <<filename;
+}
+
+void writeFile(const vector<int>& index_v, const vector<double>& v, const char* filename, bool header)
+{
+    int count = 0;
+    ofstream myfile (filename);
+    if (myfile.is_open())
+    {
+        if(header)
+            myfile << v.size();
+        for(int i = 0; i<index_v.size(); i++)
+        {
+            myfile <<index_v.at(i)<<" "<<v.at(i)<<endl;
+            count++;
+        }
+        myfile.close();
+        //cout<<count<<" points are written"<<endl;
+    }
+    else cout << "Unable to open file " <<filename;
+}
+
+void writeFile(const vector<Point>& v, const char* filename, bool header)
+{
+    int count = 0;
+    ofstream myfile (filename);
+    if (myfile.is_open())
+    {
+        if(header)
+            myfile << v.size()<<endl;
+        for(vector<Point>::const_iterator it = v.begin(); it != v.end(); it++)
+        {
+            //myfile <<count<<" "<<(*it)[0]<<" "<<(*it)[1]<<endl;
+            myfile <<(*it)[0]<<" "<<(*it)[1]<<endl;
+            count++;
+        }
+        myfile.close();
+        //cout<<count<<" points are written"<<endl;
+    }
+    else cout << "Unable to open file " <<filename;
+}
+
+void writeFile(const vector<PointD>& v, const char* filename, bool header)
+{
+    int count = 0;
+    ofstream myfile (filename);
+    if (myfile.is_open())
+    {
+        if(header)
+            myfile << v.size();
+        for(vector<PointD>::const_iterator it = v.begin(); it != v.end(); it++)
+        {
+            //myfile <<count<<" "<<(*it)[0]<<" "<<(*it)[1]<<endl;
+            myfile <<(*it)[0]<<" "<<(*it)[1]<<endl;
+            count++;
+        }
+        myfile.close();
+        //cout<<count<<" points are written"<<endl;
+    }
+    else cout << "Unable to open file " <<filename;
+}
+
+bool myfunction (int i,int j) { return (i<j); }
+bool myfunction1 (int i,int j) { return (i>j); }
+bool fmyfunction (int i,int j) { return (fabs(i)<fabs(j)); }
+bool fmyfunction1 (int i,int j) { return (fabs(i)>fabs(j)); }
+
+vector<int> sortIndex(vector<double> const& values, bool isIncrease)
+{
+    /*
+    vector<int> indices(values.size());
+    std::iota(begin(indices), end(indices), static_cast<int>(0));
+
+    if(isIncrease)
+        std::sort( begin(indices), end(indices), [&](int a, int b) { return values[a] < values[b]; } );
+    else//decrease
+        std::sort( begin(indices), end(indices), [&](int a, int b) { return values[a] > values[b]; } );
+    return indices;
+    */
+    vector<int> indices;
+    for (int i=0;i<values.size();i++)
+        indices.push_back(i);
+    if(isIncrease)
+        std::sort ( indices.begin(),  indices.end(), [&](int a, int b) { return values[a] < values[b]; });
+    else
+        std::sort ( indices.begin(),  indices.end(), [&](int a, int b) { return values[a] > values[b]; });
+    return indices;
+}
+
+vector<int> absSortIndex(vector<double> const& values, bool isIncrease)
+{
+    /*
+    vector<int> indices(values.size());
+    std::iota(begin(indices), end(indices), static_cast<int>(0));
+    if(isIncrease)
+        std::sort( begin(indices), end(indices), [&](int a, int b) { return fabs(values[a]) < fabs(values[b]); } );
+    else//decrease
+        std::sort( begin(indices), end(indices), [&](int a, int b) { return fabs(values[a]) > fabs(values[b]); } );
+    return indices;
+    */
+    vector<int> indices;
+    for (int i=0;i<values.size();i++)
+        indices.push_back(i);
+    if(isIncrease)
+        std::sort ( begin(indices), end(indices), [&](int a, int b) { return fabs(values[a]) < fabs(values[b]); });
+    else
+        std::sort ( begin(indices), end(indices), [&](int a, int b) { return fabs(values[a]) > fabs(values[b]); });
+
+    return indices;
+}
+
+vector<int> sortIndex(vector<int> const& values, bool isIncrease)
+{
+    /*
+    vector<int> indices(values.size());
+    std::iota(begin(indices), end(indices), static_cast<int>(0));
+
+    if(isIncrease)
+        std::sort( begin(indices), end(indices), [&](int a, int b) { return values[a] < values[b]; } );
+    else//decrease
+        std::sort( begin(indices), end(indices), [&](int a, int b) { return values[a] > values[b]; } );
+    return indices;
+    */
+    vector<int> indices;
+    for (int i=0;i<values.size();i++)
+        indices.push_back(i);
+    if(isIncrease)
+        std::sort ( indices.begin(),  indices.end(), [&](int a, int b) { return values[a] < values[b]; });
+    else
+        std::sort ( indices.begin(),  indices.end(), [&](int a, int b) { return values[a] > values[b]; });
+    return indices;
+}
+
+int signeInt(int n)
+{
+    if(n<0)
+        return -1;
+    if(n>0)
+        return 1;
+    return 0;
+}
+
+/* signe of vector */
+Point directionOfVector(Point N, Point startS, Point endS)
+{
+    Point N_tmp = N;
+    int signNx = 1, signNy=1;
+    signNx = signeInt(endS[0] - startS[0]);
+    signNy = signeInt(endS[1] - startS[1]);
+    //N : vector normal => (Nx, Ny)
+    //vector of direction => (Ny, -Nx) or (-Ny, Nx)
+    if(N[1]*signNx>0) N_tmp[1] = -N[1];
+    //if(signNx!= 0) N_tmp[1] = signNx*N[1];
+    if(N[0]*signNy<0) N_tmp[0] = -N[0];
+    //if(signNy!=0) N_tmp[0] = -signNy*N[0];
+    return N_tmp;
 }

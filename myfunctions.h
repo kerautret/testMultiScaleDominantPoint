@@ -44,6 +44,10 @@ struct MyDrawStyleCustomColor : public DrawableWithBoard2D
   }
 };
 
+
+double sort_increase(double a, double b);
+double sort_decrease(double a, double b);
+
 int max(int n, int m);
 int min(int n, int m);
 int pgcd(int a, int b);
@@ -66,9 +70,10 @@ PointD intersectionLines(double a, double b, double c, double d, double e, doubl
 int findElement(const vector<Point>& vec, Point p);
 int findElement(const vector<Point>& vec, Point p, int start);
 int findElement(const vector<PointD>& vec, PointD p);
+int findElement(const vector<PointD>& vec, PointD p, int start);
 
-int findStartElement(const vector<Point>& vec, const AlphaThickSegmentComputer2D s);
-int findEndElement(const vector<Point>& vec, const AlphaThickSegmentComputer2D s);
+//int findStartElement(const vector<Point>& vec, const AlphaThickSegmentComputer2D s);
+//int findEndElement(const vector<Point>& vec, const AlphaThickSegmentComputer2D s);
 
 double distancePoints(Point p1, Point p2);
 double distancePoints(PointD p1, PointD p2);
@@ -144,13 +149,16 @@ vector<Point> readFileInverse(const char* filename, bool header);
 
 vector<Point> readFile(const char* filename, int header);
 
-double readMeanindfulFile(const char* filename);
-
 vector<int> readMeanindfulScaleFile(const char* filename);
 double getGlobalNoise(const vector<int>& vect);
 
 vector<double> readMeanindfulThicknessFile(const char* filename);
 double getGlobalNoise(const vector<double>& vect);
+
+vector<double> findVectorElement(const vector<double>& vect);
+bool isRegularNoise(const vector<double>& vect, double dominantRate = 0.9);
+
+vector<PointD> readSmoothContourFile(const char* filename);
 
 void writeFile(const vector<int>& v, const char* filename, bool header);
 void writeFile(const vector<double>& v, const char* filename, bool header);
