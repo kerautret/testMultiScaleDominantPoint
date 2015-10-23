@@ -150,7 +150,8 @@ int main(int argc, char *const *argv)
     for(vector<Point>::const_iterator it = DP.begin(); it != DP.end(); it++)
     {
         indexLastDP = findElement(aContour,*it,indexLastDP);
-        indexDP.push_back(indexLastDP);
+        if(indexLastDP!=-1)
+            indexDP.push_back(indexLastDP);
     }
 
     if(verbose)
@@ -172,7 +173,8 @@ int main(int argc, char *const *argv)
     for(vector<Point>::const_iterator it = newDP.begin(); it != newDP.end(); it++)
     {
         indexLastNewDP = findElement(aContour,*it,indexLastNewDP);
-        indexNewDP.push_back(indexLastNewDP);
+        if(indexLastNewDP!=-1)
+            indexNewDP.push_back(indexLastNewDP);
     }
 
     if(verbose)
@@ -201,7 +203,9 @@ int main(int argc, char *const *argv)
     for(vector<Point>::const_iterator it = DPM.begin(); it != DPM.end(); it++)
     {
         indexLastDPM = findElement(aContour,*it,indexLastDPM);
-        indexDPM.push_back(indexLastDPM);
+        //cout<<"indexLastDPM = "<<indexLastDPM<<" Point is "<<(*it)<<endl;
+        if(indexLastDPM!=-1)
+            indexDPM.push_back(indexLastDPM);
     }
 
     if(verbose)
@@ -210,9 +214,9 @@ int main(int argc, char *const *argv)
     // /******** Dominant point detection with the adaptive tangent cover cover ******/
 
     /********** Selection of dominant points ***************/
-
+    
     stringstream filenameDPnewV;
-    filenameDPnewV << outDir << "/" << singleName << "_DPnewV.svg";
+    filenameDPnewV << outDir << "/" << singleName << "_DPnew.svg";
 
     vector<Point> newDPM = testDominantPointSelectionV2(DPM,indexDPM,aContour,isClosed,
                                                         filenameDPnewV.str().c_str(),verbose); // ISE * ANGLE
@@ -222,8 +226,9 @@ int main(int argc, char *const *argv)
     int indexLastNewDPM=0;
     for(vector<Point>::const_iterator it = newDPM.begin(); it != newDPM.end(); it++)
     {
-      indexLastNewDPM = findElement(aContour,*it,indexLastNewDPM);
-        indexNewDPM.push_back(indexLastNewDPM);
+        indexLastNewDPM = findElement(aContour,*it,indexLastNewDPM);
+        if(indexLastNewDPM!=-1)
+            indexNewDPM.push_back(indexLastNewDPM);
     }
 
     if(verbose)
