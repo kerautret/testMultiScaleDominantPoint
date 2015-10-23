@@ -177,6 +177,107 @@ vector<PointD> generateSegment(PointD startPoint, PointD endPoint, double step, 
     return P;
 }
 
+
+int compareTwoPointsVertical(Point P1, Point P2)
+{
+    if(P1==P2)
+        return 0;
+    if(P1<P2)
+        return -1;
+    return 1;
+}
+
+int compareTwoPointsHorizontal(Point P1, Point P2)
+{
+    Point P1_inv = Point(P1[1],P1[0]);
+    Point P2_inv = Point(P2[1],P2[0]);
+
+    if(P1==P2)
+        return 0;
+    if(P1_inv<P2_inv)
+        return -1;
+    return 1;
+}
+
+vector<Point> insertOrderedPoints(const vector<Point>& setP1, const vector<Point>& setP2)
+{
+    vector<Point> setP;
+    Point P1, P2;
+    int it1=0,it2=0;
+    int deltaY=0, deltaX=0;
+    while ((it1<setP1.size()) && (it2<setP2.size()))
+    {
+        P1 = setP1.at(it1);
+        P2 = setP2.at(it2);
+        if(P1==Point(0,5))
+            cout<<"STOP"<<endl;
+        if(it1!=0)
+        {
+            deltaX = abs(setP1.at(it1-1)[0] - setP1.at(it1)[0]);
+            deltaY = abs(setP1.at(it1-1)[1] - setP1.at(it1)[1]);
+        }
+        else
+        {
+            deltaX = abs(setP1.at(it1)[0] - setP1.at(it1+1)[0]);
+            deltaY = abs(setP1.at(it1)[1] - setP1.at(it1+1)[1]);
+        }
+        if(deltaX<deltaY)
+        {
+            if(compareTwoPointsHorizontal(P1,P2)==0)
+            {
+                setP.push_back(P1);
+                it1++;
+                it2++;
+            }
+            else if(compareTwoPointsHorizontal(P1,P2)<0)
+            {
+                setP.push_back(P1);
+                it1++;
+            }
+            else
+            {
+                setP.push_back(P2);
+                it2++;
+            }
+        }
+        else
+        {
+            if(compareTwoPointsVertical(P1,P2)==0)
+            {
+                setP.push_back(P1);
+                it1++;
+                it2++;
+            }
+            else if(compareTwoPointsVertical(P1,P2)<0)
+            {
+                setP.push_back(P1);
+                it1++;
+            }
+            else
+            {
+                setP.push_back(P2);
+                it2++;
+            }
+        }
+    }
+    //for(vector<Point>::const_iterator it = setP.begin(); it != setP.end(); it++)
+    //    cout<<*it<<endl;
+    while (it1<setP1.size())
+    {
+        P1 = setP1.at(it1);
+        setP.push_back(P1);
+        it1++;
+    }
+    while (it2<setP2.size())
+    {
+        P2 = setP2.at(it2);
+        setP.push_back(P2);
+        it2++;
+    }
+
+    return setP;
+}
+
 //vertical distancePoints of p to the line (aF,aL)
 double verticaldistancePoints(Point p, Point aF, Point aL)
 {
@@ -239,7 +340,7 @@ int findElement(const vector<Point>& vec, Point p, int start)
     //if(it==vec.size())
     for(it = 0; it<start; it++)
         if(vec.at(it)==p)
-            return vec.size()+it;
+            return it;//vec.size()+
     return -1;
 }
 
@@ -258,10 +359,11 @@ int findElement(const vector<PointD>& vec, PointD p, int start)
     for(it = start; it<vec.size(); it++)
         if(vec.at(it)==p)
             return it;
+    return -1;
     //if(it==vec.size())
     for(it = 0; it<start; it++)
         if(vec.at(it)==p)
-            return vec.size()+it;
+            return it;//vec.size()+
     return -1;
 }
 

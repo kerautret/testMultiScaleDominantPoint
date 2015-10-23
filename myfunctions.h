@@ -67,6 +67,8 @@ vector<PointD> generateSegment(PointD startPoint, PointD endPoint, double step, 
 
 PointD intersectionLines(double a, double b, double c, double d, double e, double f);
 
+vector<Point> insertOrderedPoints(const vector<Point>& setP1, const vector<Point>& setP2);
+
 int findElement(const vector<Point>& vec, Point p);
 int findElement(const vector<Point>& vec, Point p, int start);
 int findElement(const vector<PointD>& vec, PointD p);
@@ -99,7 +101,6 @@ double iseContourSegment(const vector<Point>& contour, Point p1, Point p2);//ise
 double iseContourSegment(const vector<Point>& contour, int indexP1, int indexP2);//ise of points between two points of index idp1,idp2 w.r.t the circle (center,radius)
 double lmaxContourSegment(const vector<Point>& contour, Point p1, Point p2);//lmax
 double lmaxContourSegment(const vector<Point>& contour, int indexP1, int indexP2);//lmax
-
 
 bool isIncreasingOrder(Point v1, Point v2); //return if two vectors is in an increasing order
 

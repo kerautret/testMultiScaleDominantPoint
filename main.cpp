@@ -15,10 +15,9 @@ using namespace std;
 int main()
 {
     cout << "Hello World!" << endl;
-
     /********** read data ***************/
     char fileContour[FILENAMESIZE];
-    char file[] = "polygoneBruit2";//flowerNoisePartBis;flowerNoisePartBis;polygoneBruitPart;ContoursTest: polygoneBruit;polygoneBruit2;ellipse; ellipseBruit;flowerSmall2;pentagon50;cercleB2;formeTest6;flower-noise
+    char file[] = "ellipseBruit2";//flowerNoisePartBis;flowerNoisePartBis;polygoneBruitPart;ContoursTest: polygoneBruit;polygoneBruit2;ellipse; ellipseBruit;flowerSmall2;pentagon50;cercleB2;formeTest6;flower-noise
     sprintf(fileContour,"%s/%s.sdp",INPUT,file);
     vector<Point> aContourTmp = readFile(fileContour,1);
     sprintf(fileContour,"%s/%s.dat",INPUT,file);
@@ -114,7 +113,8 @@ int main()
     for(vector<Point>::const_iterator it = DP.begin(); it != DP.end(); it++)
     {
         indexLastDP = findElement(aContour,*it,indexLastDP);
-        indexDP.push_back(indexLastDP);
+        if(indexLastDP!=-1)
+            indexDP.push_back(indexLastDP);
     }
 
     if(verbose)
@@ -133,7 +133,8 @@ int main()
     for(vector<Point>::const_iterator it = newDP.begin(); it != newDP.end(); it++)
     {
         indexLastNewDP = findElement(aContour,*it,indexLastNewDP);
-        indexNewDP.push_back(indexLastNewDP);
+        if(indexLastNewDP!=-1)
+            indexNewDP.push_back(indexLastNewDP);
     }
 
     if(verbose)
@@ -156,7 +157,9 @@ int main()
     for(vector<Point>::const_iterator it = DPM.begin(); it != DPM.end(); it++)
     {
         indexLastDPM = findElement(aContour,*it,indexLastDPM);
-        indexDPM.push_back(indexLastDPM);
+        //cout<<"indexLastDPM = "<<indexLastDPM<<" Point is "<<(*it)<<endl;
+        if(indexLastDPM!=-1)
+            indexDPM.push_back(indexLastDPM);
     }
 
     if(verbose)
@@ -165,7 +168,7 @@ int main()
     /******** Dominant point detection with the adaptive tangent cover cover ******/
 
     /********** Selection of dominant points ***************/
-    sprintf(filenameDPnew,"%s/%s_DPMnew_V.svg",OUTPUT,file);
+    sprintf(filenameDPnew,"%s/%s_DPMnew.svg",OUTPUT,file);
     vector<Point> newDPM = testDominantPointSelectionV2(DPM,indexDPM,aContour,isClosed,filenameDPnew,verbose); // ISE * ANGLE
 
     cout<<"===> New num of dominant points is "<<newDPM.size()<<endl;
@@ -174,7 +177,8 @@ int main()
     for(vector<Point>::const_iterator it = newDPM.begin(); it != newDPM.end(); it++)
     {
         indexLastNewDPM = findElement(aContour,*it,indexLastNewDPM);
-        indexNewDPM.push_back(indexLastNewDPM);
+        if(indexLastNewDPM!=-1)
+            indexNewDPM.push_back(indexLastNewDPM);
     }
 
     if(verbose)
