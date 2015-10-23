@@ -216,7 +216,7 @@ int main(int argc, char *const *argv)
     /********** Selection of dominant points ***************/
     
     stringstream filenameDPnewV;
-    filenameDPnewV << outDir << "/" << singleName << "_DPnew.svg";
+    filenameDPnewV << outDir << "/" << singleName << "_DPnewV.svg";
 
     vector<Point> newDPM = testDominantPointSelectionV2(DPM,indexDPM,aContour,isClosed,
                                                         filenameDPnewV.str().c_str(),verbose); // ISE * ANGLE
