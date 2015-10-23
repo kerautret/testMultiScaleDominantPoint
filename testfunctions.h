@@ -35,7 +35,7 @@ void drawMultiThicknessCover(const vector<Point>& aContour, const vector<double>
 void drawMultiThicknessCover(const vector<Point>& aContour, const vector<vector<AlphaThickSegmentComputer2D>>& meaningThicknessTangentCover, char* filename);
 void drawMultiThicknessCover(const vector<Point>& aContour, const vector<AlphaThickSegmentComputer2D>& meaningThicknessTangentCover, char* filename);
 void drawMultiThicknessCover(const vector<Point>& aContour, const vector<vector<AlphaThickSegmentComputer2D>>& meaningThicknessTangentCover, const vector<double>& thckVect, char* filename);
-void drawMeaningfulValue(const vector<Point>& aContour, const vector<double> vecMeanVal, char* filename);
+void drawMeaningfulValue(const vector<Point>& aContour, const vector<double> vecMeanVal, const char* filename);
 /********** Draw Multi-Thickness Cover **********/
 
 /******** Adaptive tangent cover computation ***********/
