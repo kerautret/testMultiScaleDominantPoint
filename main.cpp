@@ -25,12 +25,13 @@ int main(int argc, char *const *argv)
 {
   po::options_description general_opt("Allowed options are: ");
  general_opt.add_options()
- ("help,h", "display this message")
- ("input,i", po::value<std::string>(), "input contour basename (without sdp extension).")
- ("imageneDir,d", po::value<std::string>(), "specify the imagene dir.")
-   ("output,o", po::value<std::string>()->default_value("./"), "output dir (default ./).");
+   ("help,h", "display this message")
+   ("input,i", po::value<std::string>(), "input contour basename (without sdp extension).")
+   ("imageneDir,d", po::value<std::string>(), "specify the imagene dir.")
+   ("output,o", po::value<std::string>()->default_value("./"), "output dir (default ./).")
+   ("eps,e","set output with eps format");
 
-
+  
   bool parseOK=true;
   po::variables_map vm;
   try{
@@ -47,7 +48,7 @@ int main(int argc, char *const *argv)
       return 0;
     }
   
-
+  bool eps = vm.count("eps");
 
 
     /********** read data ***************/
@@ -106,7 +107,7 @@ int main(int argc, char *const *argv)
      cout<<"File : "<<baseInputName <<" => globalNoise (meaningful thickness) = "<<glNoise<<endl;
     //colorate points by its meaningful thickness
      stringstream fileColorMT; 
-     fileColorMT << outDir << "/"<< singleName  << "_Color.svg";
+     fileColorMT << outDir << "/"<< singleName  << (eps ? "_Color.eps" :"_Color.svg");
 
      drawMeaningfulValue(aContour,vecMT, fileColorMT.str().c_str());
 
@@ -135,7 +136,7 @@ int main(int argc, char *const *argv)
     /******** Dominant point detection with the adaptive tangent cover cover ******/
     vector<Point> DP;
     stringstream filenameDP;
-    filenameDP << outDir << "/" << singleName << "_DP.svg";
+    filenameDP << outDir << "/" << singleName << (eps? "_DP.eps": "_DP.svg");
     bool isClosed = false;
     bool isSymmetry = false;
 
@@ -163,7 +164,7 @@ int main(int argc, char *const *argv)
     
     /********** Selection of dominant points ***************/
     stringstream filenameDPnew;
-    filenameDPnew << outDir<< "/" << singleName << "_DPnew.svg";
+    filenameDPnew << outDir<< "/" << singleName << (eps? "_DPnew.eps":"_DPnew.svg");
     vector<Point> newDP = testDominantPointSelectionV2(DP,indexDP,aContour,
                                                        isClosed,filenameDPnew.str().c_str(),verbose); // ISE * ANGLE
     cout<<"===> New num of dominant points is "<<newDP.size()<<endl;
@@ -190,7 +191,7 @@ int main(int argc, char *const *argv)
     vector<AlphaThickSegmentComputer2D> fuzzySegmentSetMid = blurredSegmentCurveDecomposition(aContour,thickness,NULL,false);
     vector<Point> DPM;
     stringstream filenameDPM;
-    filenameDPM << outDir << "/" << singleName  << "_DPM.svg";
+    filenameDPM << outDir << "/" << singleName  << (eps?"_DPM.eps" :"_DPM.svg");
    
     //cout<<"===> Num of seg decomposed is "<<fuzzySegmentSetMid.size()<<endl;
     DPM = testDominantPointOnShape(fuzzySegmentSetMid,aContour,isSymmetry,isClosed,
@@ -216,7 +217,7 @@ int main(int argc, char *const *argv)
     /********** Selection of dominant points ***************/
     
     stringstream filenameDPnewV;
-    filenameDPnewV << outDir << "/" << singleName << "_DPnewV.svg";
+    filenameDPnewV << outDir << "/" << singleName << (eps? "_DPnewV.eps":"_DPnewV.svg");
 
     vector<Point> newDPM = testDominantPointSelectionV2(DPM,indexDPM,aContour,isClosed,
                                                         filenameDPnewV.str().c_str(),verbose); // ISE * ANGLE
