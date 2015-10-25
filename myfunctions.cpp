@@ -1278,7 +1278,7 @@ vector<int> readMeanindfulScaleFile(const char* filename)
     return P;
 }
 
-double getGlobalNoise(const vector<int>& vect)
+double getGlobalNoise(const std::vector<int>& vect)
 {
     double globalNoise = std::accumulate(std::begin(vect), std::end(vect), 0.0);
     globalNoise =  globalNoise / vect.size();

@@ -8,6 +8,7 @@
 
 #include <numeric>
 #include <algorithm>
+#include <functional>
 #include <list>
 #include <vector>
 #include <iostream>
