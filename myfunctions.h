@@ -8,6 +8,7 @@
 
 #include <numeric>
 #include <algorithm>
+#include <functional>
 #include <list>
 #include <vector>
 #include <iostream>
@@ -43,6 +44,28 @@ struct MyDrawStyleCustomColor : public DrawableWithBoard2D
     aboard.setPenColor( myPenColor );
   }
 };
+
+ struct CompVectInt{
+    CompVectInt(vector<int> indices, bool increase):myIndices(indices), myIncrease(increase){}
+    bool operator() (int v1,
+                     int v2 )
+    {
+      return myIncrease ?  myIndices[v1]<myIndices[v2] : myIndices[v1]>myIndices[v2];
+    }
+   bool myIncrease;
+   vector<int> myIndices;
+ };
+
+  struct CompVectIntAbs{
+    CompVectIntAbs(vector<int> indices, bool increase):myIndices(indices), myIncrease(increase){}
+    bool operator() (int v1,
+                     int v2 )
+    {
+      return myIncrease ?  fabs(myIndices[v1])<fabs(myIndices[v2]) : fabs(myIndices[v1])>fabs(myIndices[v2]);
+    }
+    bool myIncrease;
+    vector<int> myIndices;
+  };
 
 
 double sort_increase(double a, double b);

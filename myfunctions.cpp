@@ -1278,9 +1278,9 @@ vector<int> readMeanindfulScaleFile(const char* filename)
     return P;
 }
 
-double getGlobalNoise(const vector<int>& vect)
+double getGlobalNoise(const std::vector<int>& vect)
 {
-    double globalNoise = std::accumulate(std::begin(vect), std::end(vect), 0.0);
+  double globalNoise = std::accumulate(vect.begin(), vect.end(), 0.0);
     globalNoise =  globalNoise / vect.size();
 
     return globalNoise;
@@ -1314,7 +1314,7 @@ vector<double> readMeanindfulThicknessFile(const char* filename)
 
 double getGlobalNoise(const vector<double>& vect)
 {
-    double globalNoise = std::accumulate(std::begin(vect), std::end(vect), 0.0);
+  double globalNoise = std::accumulate(vect.begin(), vect.end(), 0.0);
     globalNoise =  globalNoise / vect.size();
 
     return globalNoise;
@@ -1482,69 +1482,39 @@ bool fmyfunction1 (int i,int j) { return (fabs(i)>fabs(j)); }
 
 vector<int> sortIndex(vector<double> const& values, bool isIncrease)
 {
-    /*
-    vector<int> indices(values.size());
-    std::iota(begin(indices), end(indices), static_cast<int>(0));
 
-    if(isIncrease)
-        std::sort( begin(indices), end(indices), [&](int a, int b) { return values[a] < values[b]; } );
-    else//decrease
-        std::sort( begin(indices), end(indices), [&](int a, int b) { return values[a] > values[b]; } );
-    return indices;
-    */
-    vector<int> indices;
-    for (int i=0;i<values.size();i++)
-        indices.push_back(i);
-    if(isIncrease)
-        std::sort ( indices.begin(),  indices.end(), [&](int a, int b) { return values[a] < values[b]; });
-    else
-        std::sort ( indices.begin(),  indices.end(), [&](int a, int b) { return values[a] > values[b]; });
+  
+  vector<int> indices;  
+  for (int i=0;i<values.size();i++)
+    indices.push_back(i);
+  CompVectInt comp (indices, true);
+  CompVectInt compO (indices, false);
+  
+  if(isIncrease)
+    std::sort ( indices.begin(),  indices.end(), comp);
+  else
+    std::sort ( indices.begin(),  indices.end(), compO);
     return indices;
 }
+
 
 vector<int> absSortIndex(vector<double> const& values, bool isIncrease)
 {
-    /*
-    vector<int> indices(values.size());
-    std::iota(begin(indices), end(indices), static_cast<int>(0));
-    if(isIncrease)
-        std::sort( begin(indices), end(indices), [&](int a, int b) { return fabs(values[a]) < fabs(values[b]); } );
-    else//decrease
-        std::sort( begin(indices), end(indices), [&](int a, int b) { return fabs(values[a]) > fabs(values[b]); } );
-    return indices;
-    */
-    vector<int> indices;
-    for (int i=0;i<values.size();i++)
-        indices.push_back(i);
-    if(isIncrease)
-        std::sort ( begin(indices), end(indices), [&](int a, int b) { return fabs(values[a]) < fabs(values[b]); });
-    else
-        std::sort ( begin(indices), end(indices), [&](int a, int b) { return fabs(values[a]) > fabs(values[b]); });
-
-    return indices;
+ 
+  vector<int> indices;
+  for (int i=0;i<values.size();i++)
+    indices.push_back(i);
+  CompVectIntAbs comp (indices, true);
+  CompVectIntAbs compO (indices, false);
+  
+  if(isIncrease)
+    std::sort ( indices.begin(), indices.end(), comp);
+  else
+    std::sort ( indices.begin(), indices.end(), compO);
+  
+  return indices;
 }
 
-vector<int> sortIndex(vector<int> const& values, bool isIncrease)
-{
-    /*
-    vector<int> indices(values.size());
-    std::iota(begin(indices), end(indices), static_cast<int>(0));
-
-    if(isIncrease)
-        std::sort( begin(indices), end(indices), [&](int a, int b) { return values[a] < values[b]; } );
-    else//decrease
-        std::sort( begin(indices), end(indices), [&](int a, int b) { return values[a] > values[b]; } );
-    return indices;
-    */
-    vector<int> indices;
-    for (int i=0;i<values.size();i++)
-        indices.push_back(i);
-    if(isIncrease)
-        std::sort ( indices.begin(),  indices.end(), [&](int a, int b) { return values[a] < values[b]; });
-    else
-        std::sort ( indices.begin(),  indices.end(), [&](int a, int b) { return values[a] > values[b]; });
-    return indices;
-}
 
 int signeInt(int n)
 {
