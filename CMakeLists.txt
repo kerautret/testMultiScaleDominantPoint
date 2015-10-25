@@ -1,8 +1,6 @@
 project(testCircleDecomposition)
 cmake_minimum_required(VERSION 2.8)
 
-
-
 #Required in DGtal
 FIND_PACKAGE(DGtal REQUIRED)
 INCLUDE_DIRECTORIES(${DGTAL_INCLUDE_DIRS})
@@ -20,6 +18,6 @@ if ( Boost_FOUND )
  endif( Boost_FOUND) 
 
 
-
-ADD_EXECUTABLE(testCircleDecomposition testCircleDecomposition)
+aux_source_directory(. SRC_LIST)
+add_executable(${PROJECT_NAME} ${SRC_LIST})
 TARGET_LINK_LIBRARIES(testCircleDecomposition ${DGTAL_LIBRARIES} ${DGtalToolsLibDependencies})
