@@ -1280,7 +1280,7 @@ vector<int> readMeanindfulScaleFile(const char* filename)
 
 double getGlobalNoise(const std::vector<int>& vect)
 {
-    double globalNoise = std::accumulate(std::begin(vect), std::end(vect), 0.0);
+  double globalNoise = std::accumulate(vect.begin(), vect.end(), 0.0);
     globalNoise =  globalNoise / vect.size();
 
     return globalNoise;
@@ -1314,7 +1314,7 @@ vector<double> readMeanindfulThicknessFile(const char* filename)
 
 double getGlobalNoise(const vector<double>& vect)
 {
-    double globalNoise = std::accumulate(std::begin(vect), std::end(vect), 0.0);
+  double globalNoise = std::accumulate(vect.begin(), vect.end(), 0.0);
     globalNoise =  globalNoise / vect.size();
 
     return globalNoise;
