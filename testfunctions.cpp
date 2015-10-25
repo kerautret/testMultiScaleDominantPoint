@@ -561,7 +561,7 @@ void drawMultiThicknessCover(const vector<Point>& aContour, const vector<double>
     aBoard.saveSVG(filename);
 }
 
-void drawMultiThicknessCover(const vector<Point>& aContour, const vector<vector<AlphaThickSegmentComputer2D>>& meaningThicknessTangentCover, char* filename)
+void drawMultiThicknessCover(const vector<Point>& aContour, const vector<vector<AlphaThickSegmentComputer2D> >& meaningThicknessTangentCover, char* filename)
 {
     Board2D aBoard;
     /* display the boundary */
@@ -576,7 +576,7 @@ void drawMultiThicknessCover(const vector<Point>& aContour, const vector<vector<
     unsigned int count = 1;
     // Creating colormap
     HueShadeColorMap<double> hueMap(0.9, meaningThicknessTangentCover.size()+1.0);
-    for(vector<vector<AlphaThickSegmentComputer2D>>::const_iterator it = meaningThicknessTangentCover.begin(); it != meaningThicknessTangentCover.end(); it++)
+    for(vector<vector<AlphaThickSegmentComputer2D> >::const_iterator it = meaningThicknessTangentCover.begin(); it != meaningThicknessTangentCover.end(); it++)
     {
         vector<AlphaThickSegmentComputer2D> fuzzySegmentSet = *it;
         for (vector<AlphaThickSegmentComputer2D>::const_iterator it_bis = fuzzySegmentSet.begin();it_bis != fuzzySegmentSet.end();it_bis++)
@@ -610,7 +610,7 @@ void drawMultiThicknessCover(const vector<Point>& aContour, const vector<AlphaTh
     aBoard.saveSVG(filename);
 }
 
-void drawMultiThicknessCover(const vector<Point>& aContour, const vector<vector<AlphaThickSegmentComputer2D>>& meaningThicknessTangentCover, const vector<double>& thckVect, char* filename)
+void drawMultiThicknessCover(const vector<Point>& aContour, const vector<vector<AlphaThickSegmentComputer2D> >& meaningThicknessTangentCover, const vector<double>& thckVect, char* filename)
 {
     Board2D aBoard;
     // Creating colormap
@@ -629,7 +629,7 @@ void drawMultiThicknessCover(const vector<Point>& aContour, const vector<vector<
 
     /* Display boundingbox */
     string classNameSeg = "AlphaThickSegment/BoundingBox";
-    for(vector<vector<AlphaThickSegmentComputer2D>>::const_iterator it = meaningThicknessTangentCover.begin(); it != meaningThicknessTangentCover.end(); it++)
+    for(vector<vector<AlphaThickSegmentComputer2D> >::const_iterator it = meaningThicknessTangentCover.begin(); it != meaningThicknessTangentCover.end(); it++)
     {
         vector<AlphaThickSegmentComputer2D> fuzzySegmentSet = *it;
         for (vector<AlphaThickSegmentComputer2D>::const_iterator it_bis = fuzzySegmentSet.begin();it_bis != fuzzySegmentSet.end();it_bis++)
@@ -707,7 +707,7 @@ vector<AlphaThickSegmentComputer2D> testAdaptiveTangentCover(const vector<Point>
     drawMultiThicknessCover(aContour,vecMT,meaningThicknessElement.size(),fileAdaptMT);
 
     //2. Compute different thickness tangent covers (blurred segments)
-    vector<vector<AlphaThickSegmentComputer2D>> meaningThicknessTangentCover(meaningThicknessElement.size());
+    vector<vector<AlphaThickSegmentComputer2D> > meaningThicknessTangentCover(meaningThicknessElement.size());
     int index = 0;
     for(vector<double>::const_iterator it = meaningThicknessElement.begin(); it != meaningThicknessElement.end(); it++)
     {
@@ -729,7 +729,7 @@ vector<AlphaThickSegmentComputer2D> testAdaptiveTangentCover(const vector<Point>
     for(vector<double>::const_iterator it = vecMT.begin(); it != vecMT.end(); it++)
         vecMTmodified.push_back(-1);
     int idCover = 0;
-    for(vector<vector<AlphaThickSegmentComputer2D>>::const_iterator it = meaningThicknessTangentCover.begin(); it != meaningThicknessTangentCover.end(); it++)
+    for(vector<vector<AlphaThickSegmentComputer2D> >::const_iterator it = meaningThicknessTangentCover.begin(); it != meaningThicknessTangentCover.end(); it++)
     {
         vector<AlphaThickSegmentComputer2D> fuzzySegmentSet = *it;
         double thickness = meaningThicknessElement.at(idCover);
@@ -764,9 +764,9 @@ vector<AlphaThickSegmentComputer2D> testAdaptiveTangentCover(const vector<Point>
     drawMultiThicknessCover(aContour,vecMTmodified,meaningThicknessElement.size(),fileAdaptMT);
 
     //4. Travel over the tangent covers and select the segments w.r.t the associated thickness of points
-    vector<vector<AlphaThickSegmentComputer2D>> adaptiveMeaningThicknessTangentCover;
+    vector<vector<AlphaThickSegmentComputer2D> > adaptiveMeaningThicknessTangentCover;
     idCover = 0;
-    for(vector<vector<AlphaThickSegmentComputer2D>>::const_iterator it = meaningThicknessTangentCover.begin(); it != meaningThicknessTangentCover.end(); it++)
+    for(vector<vector<AlphaThickSegmentComputer2D> >::const_iterator it = meaningThicknessTangentCover.begin(); it != meaningThicknessTangentCover.end(); it++)
     {
         adaptiveMeaningThicknessTangentCover.push_back(vector<AlphaThickSegmentComputer2D>());
         vector<AlphaThickSegmentComputer2D> fuzzySegmentSet = *it;
