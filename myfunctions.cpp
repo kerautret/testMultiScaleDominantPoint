@@ -1482,69 +1482,52 @@ bool fmyfunction1 (int i,int j) { return (fabs(i)>fabs(j)); }
 
 vector<int> sortIndex(vector<double> const& values, bool isIncrease)
 {
-    /*
-    vector<int> indices(values.size());
-    std::iota(begin(indices), end(indices), static_cast<int>(0));
 
-    if(isIncrease)
-        std::sort( begin(indices), end(indices), [&](int a, int b) { return values[a] < values[b]; } );
-    else//decrease
-        std::sort( begin(indices), end(indices), [&](int a, int b) { return values[a] > values[b]; } );
-    return indices;
-    */
+  struct comp{
+    comp(vector<int> indices, bool increase):myIndices(indices), myIncrease(increase){}
+    bool operator() (int v1,
+                     int v2 )
+    {
+      return myIncrease ?  myIndices[v1]<myIndices[v2] : myIndices[v1]>myIndices[v2];
+    }
+    bool myIncrease = true;
+    vector<int> myIndices;
+  };
+   
     vector<int> indices;
     for (int i=0;i<values.size();i++)
         indices.push_back(i);
     if(isIncrease)
-        std::sort ( indices.begin(),  indices.end(), [&](int a, int b) { return values[a] < values[b]; });
+      std::sort ( indices.begin(),  indices.end(), comp(indices,true));
     else
-        std::sort ( indices.begin(),  indices.end(), [&](int a, int b) { return values[a] > values[b]; });
+      std::sort ( indices.begin(),  indices.end(), comp(indices,false));
     return indices;
 }
 
 vector<int> absSortIndex(vector<double> const& values, bool isIncrease)
 {
-    /*
-    vector<int> indices(values.size());
-    std::iota(begin(indices), end(indices), static_cast<int>(0));
-    if(isIncrease)
-        std::sort( begin(indices), end(indices), [&](int a, int b) { return fabs(values[a]) < fabs(values[b]); } );
-    else//decrease
-        std::sort( begin(indices), end(indices), [&](int a, int b) { return fabs(values[a]) > fabs(values[b]); } );
-    return indices;
-    */
+  struct compAbs{
+    compAbs(vector<int> indices, bool increase):myIndices(indices), myIncrease(increase){}
+    bool operator() (int v1,
+                     int v2 )
+    {
+      return myIncrease ?  fabs(myIndices[v1])<fabs(myIndices[v2]) : fabs(myIndices[v1])>fabs(myIndices[v2]);
+    }
+    bool myIncrease = true;
+    vector<int> myIndices;
+  };
+ 
     vector<int> indices;
     for (int i=0;i<values.size();i++)
         indices.push_back(i);
     if(isIncrease)
-        std::sort ( begin(indices), end(indices), [&](int a, int b) { return fabs(values[a]) < fabs(values[b]); });
+      std::sort ( begin(indices), end(indices), compAbs(indices,  true));
     else
-        std::sort ( begin(indices), end(indices), [&](int a, int b) { return fabs(values[a]) > fabs(values[b]); });
-
+      std::sort ( begin(indices), end(indices), compAbs(indices, false));
+    
     return indices;
 }
 
-vector<int> sortIndex(vector<int> const& values, bool isIncrease)
-{
-    /*
-    vector<int> indices(values.size());
-    std::iota(begin(indices), end(indices), static_cast<int>(0));
-
-    if(isIncrease)
-        std::sort( begin(indices), end(indices), [&](int a, int b) { return values[a] < values[b]; } );
-    else//decrease
-        std::sort( begin(indices), end(indices), [&](int a, int b) { return values[a] > values[b]; } );
-    return indices;
-    */
-    vector<int> indices;
-    for (int i=0;i<values.size();i++)
-        indices.push_back(i);
-    if(isIncrease)
-        std::sort ( indices.begin(),  indices.end(), [&](int a, int b) { return values[a] < values[b]; });
-    else
-        std::sort ( indices.begin(),  indices.end(), [&](int a, int b) { return values[a] > values[b]; });
-    return indices;
-}
 
 int signeInt(int n)
 {
