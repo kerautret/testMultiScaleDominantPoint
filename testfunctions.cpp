@@ -11,8 +11,7 @@ vector<AlphaThickSegmentComputer2D> blurredSegmentCurveDecomposition(const vecto
     PointD N;
     vector<AlphaThickSegmentComputer2D> fuzzySegmentSet;
     int index=0;
-    std::string n (filename);
-    std::string outputExt = n.substr(n.find_last_of(".")+1);
+  
     //run over the points on the contours
     for (vector<Point>::const_iterator it = aContour.begin();it != aContour.end();it++)
     {
@@ -70,6 +69,8 @@ vector<AlphaThickSegmentComputer2D> blurredSegmentCurveDecomposition(const vecto
 
     if(filename != NULL)
     {
+      std::string n (filename);
+      std::string outputExt = n.substr(n.find_last_of(".")+1);
         Board2D aBoard;
         //int count=0;
         /* display the boundary */
@@ -104,8 +105,6 @@ vector<AlphaThickSegmentComputer2D> blurredSegmentCurveDecomposition(const vecto
 /************************************/
 vector<Point> testDominantPointOnShape(const vector<AlphaThickSegmentComputer2D>& fuzzySegmentSet, const vector<Point>& aContour, bool isSymmetry, bool isClosed, const char* filename, bool verbose)
 {
-  std::string n (filename);
-  std::string outputExt = n.substr(n.find_last_of(".")+1);
   int p=1, q=0, Eq=0, Bp=0, m=fuzzySegmentSet.size();
     vector<Point> pile;
     while (p<m && q<m && Bp>=0 && Eq>=0)
@@ -239,6 +238,9 @@ vector<Point> testDominantPointOnShape(const vector<AlphaThickSegmentComputer2D>
 
     if(filename != NULL)
     {
+      std::string n (filename);
+      std::string outputExt = n.substr(n.find_last_of(".")+1);
+
         Board2D aBoard;
         /* Display the boundary */
         aBoard << SetMode("PointVector", "Both");
@@ -292,8 +294,6 @@ vector<Point> testDominantPointOnShape(const vector<AlphaThickSegmentComputer2D>
 /* Selection by ise*angle */
 vector<Point> testDominantPointSelectionV1(const vector<Point>& DP, const vector<int>& indexDP, int nbDP, const vector<Point>& aContour, bool isClosed, const char* filename, bool verbose)
 {
-  std::string n (filename);
-  std::string outputExt = n.substr(n.find_last_of(".")+1);
     vector<Point> selectedDP;
     for(vector<Point>::const_iterator it = DP.begin(); it != DP.end(); it++)
         selectedDP.push_back(*it);
@@ -369,6 +369,9 @@ vector<Point> testDominantPointSelectionV1(const vector<Point>& DP, const vector
 
     if(filename != NULL)
     {
+      std::string n (filename);
+      std::string outputExt = n.substr(n.find_last_of(".")+1);
+
         Board2D aBoard;
         /* Display the boundary */
         aBoard << SetMode("PointVector", "Both");
@@ -419,9 +422,7 @@ vector<Point> testDominantPointSelectionV1(const vector<Point>& DP, const vector
 /* Selection by max error criterion */
 vector<Point> testDominantPointSelectionV2(const vector<Point>& DP, const vector<int>& indexDP, const vector<Point>& aContour, bool isClosed, const char* filename, bool verbose)
 {
-  std::string n (filename);
-  std::string outputExt = n.substr(n.find_last_of(".")+1);
-
+ 
     vector<Point> selectedDP;
     for(vector<Point>::const_iterator it = DP.begin(); it != DP.end(); it++)
         selectedDP.push_back(*it);
@@ -519,7 +520,10 @@ vector<Point> testDominantPointSelectionV2(const vector<Point>& DP, const vector
 
     if(filename != NULL)
     {
-        Board2D aBoard;
+      std::string n (filename);
+      std::string outputExt = n.substr(n.find_last_of(".")+1);
+
+      Board2D aBoard;
         /* Display the boundary */
         aBoard << SetMode("PointVector", "Both");
         for (vector<Point>::const_iterator it = aContour.begin(); it != aContour.end(); it++)
@@ -768,9 +772,6 @@ void drawMeaningfulValue(const vector<Point>& aContour, const vector<double> vec
 /****************************************************************/
 vector<AlphaThickSegmentComputer2D> testAdaptiveTangentCover(const vector<Point>& aContour, const vector<double>& vecMT, const char* filename, bool verbose)
 {
-  std::string n (filename);
-  std::string outputExt = n.substr(n.find_last_of(".")+1);
-
     //1. Find vector of thickness element
     vector<double> meaningThicknessElement;
     meaningThicknessElement.push_back(vecMT.front());
@@ -801,8 +802,14 @@ vector<AlphaThickSegmentComputer2D> testAdaptiveTangentCover(const vector<Point>
             meaningThicknessTangentCover[index].push_back(*it_bis);
         index++;
     }
-    if(filename != NULL)
-        sprintf(fileAdaptMT,"%s_Step2.svg",filename);
+  if(filename != NULL){
+      std::string n (filename);
+      std::string outputExt = n.substr(n.find_last_of(".")+1);
+    if (outputExt=="svg"){
+      sprintf(fileAdaptMT,"%s_Step2.svg",filename);
+    }else if (outputExt=="eps")
+      sprintf(fileAdaptMT,"%s_Step2.eps",filename);
+  }
     drawMultiThicknessCover(aContour,meaningThicknessTangentCover,vecMT,fileAdaptMT);//graduate color with vecMT
     ///drawMultiThicknessCover(aContour,meaningThicknessTangentCover,"tmpS2.svg");
 
@@ -841,8 +848,14 @@ vector<AlphaThickSegmentComputer2D> testAdaptiveTangentCover(const vector<Point>
         }
         idCover++;
     }
-    if(filename != NULL)
-        sprintf(fileAdaptMT,"%s_Step3.svg",filename);
+  if(filename != NULL){
+    std::string n (filename);
+    std::string outputExt = n.substr(n.find_last_of(".")+1);
+    if (outputExt=="svg"){
+      sprintf(fileAdaptMT,"%s_Step3.svg",filename);
+    }else if (outputExt=="eps")
+      sprintf(fileAdaptMT,"%s_Step3.eps",filename);
+  }
     drawMultiThicknessCover(aContour,vecMTmodified,meaningThicknessElement.size(),fileAdaptMT);
 
     //4. Travel over the tangent covers and select the segments w.r.t the associated thickness of points
@@ -882,9 +895,16 @@ vector<AlphaThickSegmentComputer2D> testAdaptiveTangentCover(const vector<Point>
 
         idCover++;
     }
-    if(filename != NULL)
-        sprintf(fileAdaptMT,"%s_Step4.svg",filename);
-    drawMultiThicknessCover(aContour,adaptiveMeaningThicknessTangentCover,fileAdaptMT);
+  if(filename != NULL){
+    std::string n (filename);
+    std::string outputExt = n.substr(n.find_last_of(".")+1);
+    if (outputExt=="svg"){
+      sprintf(fileAdaptMT,"%s_Step4.svg",filename);
+    }else if (outputExt=="eps")
+      sprintf(fileAdaptMT,"%s_Step4.eps",filename);
+  }
+
+  drawMultiThicknessCover(aContour,adaptiveMeaningThicknessTangentCover,fileAdaptMT);
 
     //5. Reorder the multi-thickness tangent cover
     vector<AlphaThickSegmentComputer2D> adaptiveTangentCover;
@@ -946,8 +966,14 @@ vector<AlphaThickSegmentComputer2D> testAdaptiveTangentCover(const vector<Point>
         idThicknessCover.at(idMin) = idThicknessCover.at(idMin) + 1;
         seg++;
     }
-    if(filename != NULL)
-        sprintf(fileAdaptMT,"%s_Step5.svg",filename);
+  if(filename != NULL){
+    std::string n (filename);
+    std::string outputExt = n.substr(n.find_last_of(".")+1);
+    if (outputExt=="svg"){
+      sprintf(fileAdaptMT,"%s_Step5.svg",filename);
+    }else if (outputExt=="eps")
+      sprintf(fileAdaptMT,"%s_Step5.eps",filename);
+  }
     drawMultiThicknessCover(aContour,adaptiveTangentCover,fileAdaptMT);
 
     if(verbose)
