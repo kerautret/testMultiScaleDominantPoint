@@ -19,7 +19,7 @@ if ( Boost_FOUND )
      SET(DGtalLibInc ${Boost_INCLUDE_DIRS})
  endif( Boost_FOUND) 
 
-add_definitions(-g)
 
-ADD_EXECUTABLE(testCircleDecomposition testCircleDecomposition  )
+
+ADD_EXECUTABLE(testCircleDecomposition testCircleDecomposition)
 TARGET_LINK_LIBRARIES(testCircleDecomposition ${DGTAL_LIBRARIES} ${DGtalToolsLibDependencies})
