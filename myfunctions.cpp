@@ -1508,9 +1508,9 @@ vector<int> absSortIndex(vector<double> const& values, bool isIncrease)
   CompVectIntAbs compO (indices, false);
   
   if(isIncrease)
-    std::sort ( begin(indices), end(indices), comp);
+    std::sort ( indices.begin(), indices.end(), comp);
   else
-    std::sort ( begin(indices), end(indices), compO);
+    std::sort ( indices.begin(), indices.end(), compO);
   
   return indices;
 }
