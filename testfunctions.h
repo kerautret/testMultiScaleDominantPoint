@@ -32,9 +32,9 @@ vector<Point> testDominantPointSelectionV2(const vector<Point>& DP, const vector
 
 /********** Draw Multi-Thickness Cover **********/
 void drawMultiThicknessCover(const vector<Point>& aContour, const vector<double>& thckVect, int nbColor, char* filename);
-void drawMultiThicknessCover(const vector<Point>& aContour, const vector<vector<AlphaThickSegmentComputer2D>>& meaningThicknessTangentCover, char* filename);
+void drawMultiThicknessCover(const vector<Point>& aContour, const vector<vector<AlphaThickSegmentComputer2D> >& meaningThicknessTangentCover, char* filename);
 void drawMultiThicknessCover(const vector<Point>& aContour, const vector<AlphaThickSegmentComputer2D>& meaningThicknessTangentCover, char* filename);
-void drawMultiThicknessCover(const vector<Point>& aContour, const vector<vector<AlphaThickSegmentComputer2D>>& meaningThicknessTangentCover, const vector<double>& thckVect, char* filename);
+void drawMultiThicknessCover(const vector<Point>& aContour, const vector<vector<AlphaThickSegmentComputer2D> >& meaningThicknessTangentCover, const vector<double>& thckVect, char* filename);
 void drawMeaningfulValue(const vector<Point>& aContour, const vector<double> vecMeanVal, const char* filename);
 /********** Draw Multi-Thickness Cover **********/
 
