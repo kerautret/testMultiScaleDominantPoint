@@ -52,9 +52,9 @@ struct MyDrawStyleCustomColor : public DrawableWithBoard2D
     {
       return myIncrease ?  myIndices[v1]<myIndices[v2] : myIndices[v1]>myIndices[v2];
     }
-    bool myIncrease = true;
-    vector<int> myIndices;
-  };
+   bool myIncrease;
+   vector<int> myIndices;
+ };
 
   struct CompVectIntAbs{
     CompVectIntAbs(vector<int> indices, bool increase):myIndices(indices), myIncrease(increase){}
@@ -63,7 +63,7 @@ struct MyDrawStyleCustomColor : public DrawableWithBoard2D
     {
       return myIncrease ?  fabs(myIndices[v1])<fabs(myIndices[v2]) : fabs(myIndices[v1])>fabs(myIndices[v2]);
     }
-    bool myIncrease = true;
+    bool myIncrease;
     vector<int> myIndices;
   };
 
