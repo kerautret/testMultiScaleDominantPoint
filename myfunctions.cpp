@@ -1483,47 +1483,32 @@ bool fmyfunction1 (int i,int j) { return (fabs(i)>fabs(j)); }
 vector<int> sortIndex(vector<double> const& values, bool isIncrease)
 {
 
-  struct comp{
-    comp(vector<int> indices, bool increase):myIndices(indices), myIncrease(increase){}
-    bool operator() (int v1,
-                     int v2 )
-    {
-      return myIncrease ?  myIndices[v1]<myIndices[v2] : myIndices[v1]>myIndices[v2];
-    }
-    bool myIncrease = true;
-    vector<int> myIndices;
-  };
+  CompVectInt comp (indices, true);
+  CompVectInt compO (indices, false);
    
     vector<int> indices;
     for (int i=0;i<values.size();i++)
         indices.push_back(i);
     if(isIncrease)
-      std::sort ( indices.begin(),  indices.end(), comp(indices,true));
+      std::sort ( indices.begin(),  indices.end(), comp);
     else
-      std::sort ( indices.begin(),  indices.end(), comp(indices,false));
+      std::sort ( indices.begin(),  indices.end(), compO);
     return indices;
 }
 
+
 vector<int> absSortIndex(vector<double> const& values, bool isIncrease)
 {
-  struct compAbs{
-    compAbs(vector<int> indices, bool increase):myIndices(indices), myIncrease(increase){}
-    bool operator() (int v1,
-                     int v2 )
-    {
-      return myIncrease ?  fabs(myIndices[v1])<fabs(myIndices[v2]) : fabs(myIndices[v1])>fabs(myIndices[v2]);
-    }
-    bool myIncrease = true;
-    vector<int> myIndices;
-  };
+  CompVectIntAbs comp (indices, true);
+  CompVectIntAbs compO (indices, false);
  
     vector<int> indices;
     for (int i=0;i<values.size();i++)
         indices.push_back(i);
     if(isIncrease)
-      std::sort ( begin(indices), end(indices), compAbs(indices,  true));
+      std::sort ( begin(indices), end(indices), comp);
     else
-      std::sort ( begin(indices), end(indices), compAbs(indices, false));
+      std::sort ( begin(indices), end(indices), compO);
     
     return indices;
 }
