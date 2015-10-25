@@ -1483,34 +1483,36 @@ bool fmyfunction1 (int i,int j) { return (fabs(i)>fabs(j)); }
 vector<int> sortIndex(vector<double> const& values, bool isIncrease)
 {
 
+  
+  vector<int> indices;  
+  for (int i=0;i<values.size();i++)
+    indices.push_back(i);
   CompVectInt comp (indices, true);
   CompVectInt compO (indices, false);
-   
-    vector<int> indices;
-    for (int i=0;i<values.size();i++)
-        indices.push_back(i);
-    if(isIncrease)
-      std::sort ( indices.begin(),  indices.end(), comp);
-    else
-      std::sort ( indices.begin(),  indices.end(), compO);
+  
+  if(isIncrease)
+    std::sort ( indices.begin(),  indices.end(), comp);
+  else
+    std::sort ( indices.begin(),  indices.end(), compO);
     return indices;
 }
 
 
 vector<int> absSortIndex(vector<double> const& values, bool isIncrease)
 {
+ 
+  vector<int> indices;
+  for (int i=0;i<values.size();i++)
+    indices.push_back(i);
   CompVectIntAbs comp (indices, true);
   CompVectIntAbs compO (indices, false);
- 
-    vector<int> indices;
-    for (int i=0;i<values.size();i++)
-        indices.push_back(i);
-    if(isIncrease)
-      std::sort ( begin(indices), end(indices), comp);
-    else
-      std::sort ( begin(indices), end(indices), compO);
-    
-    return indices;
+  
+  if(isIncrease)
+    std::sort ( begin(indices), end(indices), comp);
+  else
+    std::sort ( begin(indices), end(indices), compO);
+  
+  return indices;
 }
 
 
