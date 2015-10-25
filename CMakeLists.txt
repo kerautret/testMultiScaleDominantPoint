@@ -8,6 +8,7 @@ FIND_PACKAGE(DGtal REQUIRED)
 INCLUDE_DIRECTORIES(${DGTAL_INCLUDE_DIRS})
 LINK_DIRECTORIES(${DGTAL_LIBRARY_DIRS})
 
+
 FIND_PACKAGE(Boost 1.46.0 REQUIRED COMPONENTS program_options)
 if ( Boost_FOUND )
   message(STATUS "Boost and boost_program_options found.")
@@ -20,5 +21,5 @@ if ( Boost_FOUND )
 
 add_definitions(-g)
 
-LINK_DIRECTORIES(${DGTAL_LIBRARY_DIRS})
+ADD_EXECUTABLE(testCircleDecomposition testCircleDecomposition  )
 TARGET_LINK_LIBRARIES(testCircleDecomposition ${DGTAL_LIBRARIES} ${DGtalToolsLibDependencies})
