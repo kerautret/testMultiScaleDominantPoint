@@ -127,7 +127,7 @@ int main(int argc, char *const *argv)
     fileAdaptMT << outDir<< "/"<< singleName<< "ATC";
     bool verbose = false;
 
-    adaptiveTangentCover = testAdaptiveTangentCover(aContour,vecMT,fileAdaptMT.str().c_str(),verbose);
+    adaptiveTangentCover = testAdaptiveTangentCover(aContour,vecMT,fileAdaptMT.str().c_str(), (eps? "eps": "svg"), verbose);
     /******** Adaptive tangent cover ***********/
 
 

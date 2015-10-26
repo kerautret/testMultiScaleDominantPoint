@@ -39,7 +39,7 @@ void drawMeaningfulValue(const vector<Point>& aContour, const vector<double> vec
 /********** Draw Multi-Thickness Cover **********/
 
 /******** Adaptive tangent cover computation ***********/
-vector<AlphaThickSegmentComputer2D> testAdaptiveTangentCover(const vector<Point>& aContour, const vector<double>& vecMT, const char* filename = NULL, bool verbose = false);
+vector<AlphaThickSegmentComputer2D> testAdaptiveTangentCover(const vector<Point>& aContour, const vector<double>& vecMT, const char* filename = NULL, std::string ext="svg", bool verbose = false);
 /******** Adaptive tangent cover computation ***********/
 #endif // TESTFUNCTION
 

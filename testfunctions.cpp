@@ -770,7 +770,7 @@ void drawMeaningfulValue(const vector<Point>& aContour, const vector<double> vec
 /****************************************************************/
 /*********** Adaptive tangent cover computation *****************/
 /****************************************************************/
-vector<AlphaThickSegmentComputer2D> testAdaptiveTangentCover(const vector<Point>& aContour, const vector<double>& vecMT, const char* filename, bool verbose)
+vector<AlphaThickSegmentComputer2D> testAdaptiveTangentCover(const vector<Point>& aContour, const vector<double>& vecMT, const char* filename, std::string ext, bool verbose)
 {
     //1. Find vector of thickness element
     vector<double> meaningThicknessElement;
@@ -785,8 +785,13 @@ vector<AlphaThickSegmentComputer2D> testAdaptiveTangentCover(const vector<Point>
     for(vector<double>::const_iterator it = meaningThicknessElement.begin(); it != meaningThicknessElement.end(); it++)
         cout<<"meaningThicknessElement : "<<*it<<endl;
     char fileAdaptMT[FILENAMESIZE];
-    if(filename != NULL)
+    if(filename != NULL){
+      if(ext=="svg"){
         sprintf(fileAdaptMT,"%s_Step1.svg",filename);
+      }else if (ext=="eps"){
+        sprintf(fileAdaptMT,"%s_Step1.eps",filename);
+      }
+    }
     drawMultiThicknessCover(aContour,vecMT,meaningThicknessElement.size(),fileAdaptMT);
 
     //2. Compute different thickness tangent covers (blurred segments)
@@ -803,11 +808,10 @@ vector<AlphaThickSegmentComputer2D> testAdaptiveTangentCover(const vector<Point>
         index++;
     }
   if(filename != NULL){
-      std::string n (filename);
-      std::string outputExt = n.substr(n.find_last_of(".")+1);
-    if (outputExt=="svg"){
+  
+    if (ext=="svg"){
       sprintf(fileAdaptMT,"%s_Step2.svg",filename);
-    }else if (outputExt=="eps")
+    }else if (ext=="eps")
       sprintf(fileAdaptMT,"%s_Step2.eps",filename);
   }
     drawMultiThicknessCover(aContour,meaningThicknessTangentCover,vecMT,fileAdaptMT);//graduate color with vecMT
@@ -849,11 +853,9 @@ vector<AlphaThickSegmentComputer2D> testAdaptiveTangentCover(const vector<Point>
         idCover++;
     }
   if(filename != NULL){
-    std::string n (filename);
-    std::string outputExt = n.substr(n.find_last_of(".")+1);
-    if (outputExt=="svg"){
+    if (ext=="svg"){
       sprintf(fileAdaptMT,"%s_Step3.svg",filename);
-    }else if (outputExt=="eps")
+    }else if (ext=="eps")
       sprintf(fileAdaptMT,"%s_Step3.eps",filename);
   }
     drawMultiThicknessCover(aContour,vecMTmodified,meaningThicknessElement.size(),fileAdaptMT);
@@ -896,11 +898,9 @@ vector<AlphaThickSegmentComputer2D> testAdaptiveTangentCover(const vector<Point>
         idCover++;
     }
   if(filename != NULL){
-    std::string n (filename);
-    std::string outputExt = n.substr(n.find_last_of(".")+1);
-    if (outputExt=="svg"){
+    if (ext=="svg"){
       sprintf(fileAdaptMT,"%s_Step4.svg",filename);
-    }else if (outputExt=="eps")
+    }else if (ext=="eps")
       sprintf(fileAdaptMT,"%s_Step4.eps",filename);
   }
 
@@ -967,11 +967,9 @@ vector<AlphaThickSegmentComputer2D> testAdaptiveTangentCover(const vector<Point>
         seg++;
     }
   if(filename != NULL){
-    std::string n (filename);
-    std::string outputExt = n.substr(n.find_last_of(".")+1);
-    if (outputExt=="svg"){
+    if (ext=="svg"){
       sprintf(fileAdaptMT,"%s_Step5.svg",filename);
-    }else if (outputExt=="eps")
+    }else if (ext=="eps")
       sprintf(fileAdaptMT,"%s_Step5.eps",filename);
   }
     drawMultiThicknessCover(aContour,adaptiveTangentCover,fileAdaptMT);
