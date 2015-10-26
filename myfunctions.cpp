@@ -1487,8 +1487,8 @@ vector<int> sortIndex(vector<double> const& values, bool isIncrease)
   vector<int> indices;  
   for (int i=0;i<values.size();i++)
     indices.push_back(i);
-  CompVectInt comp (indices, true);
-  CompVectInt compO (indices, false);
+  CompVectInt<double> comp (values, true);
+  CompVectInt<double> compO (values, false);
   
   if(isIncrease)
     std::sort ( indices.begin(),  indices.end(), comp);
@@ -1504,8 +1504,8 @@ vector<int> absSortIndex(vector<double> const& values, bool isIncrease)
   vector<int> indices;
   for (int i=0;i<values.size();i++)
     indices.push_back(i);
-  CompVectIntAbs comp (indices, true);
-  CompVectIntAbs compO (indices, false);
+  CompVectIntAbs<double> comp (values, true);
+  CompVectIntAbs<double> compO (values, false);
   
   if(isIncrease)
     std::sort ( indices.begin(), indices.end(), comp);
@@ -1513,6 +1513,33 @@ vector<int> absSortIndex(vector<double> const& values, bool isIncrease)
     std::sort ( indices.begin(), indices.end(), compO);
   
   return indices;
+}
+
+
+vector<int> sortIndex(vector<int> const& values, bool isIncrease)
+{
+    /*
+    vector<int> indices(values.size());
+    std::iota(begin(indices), end(indices), static_cast<int>(0));
+
+    if(isIncrease)
+        std::sort( begin(indices), end(indices), [&](int a, int b) { return values[a] < values[b]; } );
+    else//decrease
+        std::sort( begin(indices), end(indices), [&](int a, int b) { return values[a] > values[b]; } );
+    return indices;
+    */
+  
+    vector<int> indices;
+    for (int i=0;i<values.size();i++)
+        indices.push_back(i);
+    CompVectIntAbs<int> comp (values, true);
+    CompVectIntAbs<int> compO (values, false);
+    
+    if(isIncrease)
+        std::sort ( indices.begin(),  indices.end(), comp);
+    else
+        std::sort ( indices.begin(),  indices.end(), compO);
+    return indices;
 }
 
 
