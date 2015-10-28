@@ -47,26 +47,26 @@ struct MyDrawStyleCustomColor : public DrawableWithBoard2D
 
 template<typename T>
  struct CompVectInt{
-    CompVectInt(vector<T> values, bool increase):myValues(values), myIncrease(increase){}
+    CompVectInt(const vector<T> &values, bool increase):myValues(values), myIncrease(increase){}
     bool operator() (int v1,
                      int v2 )
     {
       return myIncrease ?  myValues[v1]<myValues[v2] : myValues[v1]>myValues[v2];
     }
    bool myIncrease;
-   vector<T> myValues;
+   const vector<T>  &myValues;
  };
 
 template<typename T>
 struct CompVectIntAbs{
-    CompVectIntAbs(vector<T> values, bool increase):myValues(values), myIncrease(increase){}
+    CompVectIntAbs( const vector<T> &values, bool increase):myValues(values), myIncrease(increase){}
     bool operator() (int v1,
                      int v2 )
     {
       return myIncrease ?  fabs(myValues[v1])<fabs(myValues[v2]) : fabs(myValues[v1])>fabs(myValues[v2]);
     }
     bool myIncrease;
-    vector<T> myValues;
+    const vector<T> &myValues;
   };
 
 
