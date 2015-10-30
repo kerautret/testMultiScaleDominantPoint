@@ -1,35 +1,30 @@
 #include <iostream>
 #include "myfunctions.h"
 #include "testfunctions.h"
-
 #include "DGtal/geometry/curves/FreemanChain.h"
-
-
 
 #include <boost/program_options/options_description.hpp>
 #include <boost/program_options/parsers.hpp>
 #include <boost/program_options/variables_map.hpp>
 
 namespace po = boost::program_options;
-
-
-#define INPUT "DataSet/ContoursTest"
-#define OUTPUT "Result/ContoursTest"
-
-//#define INPUT "DataSet/PGMSDP"
-//#define OUTPUT "Result/PGMSDP"
-
 using namespace std;
+const std::string version = "1.0.1";
+
+
 
 int main(int argc, char *const *argv)
 {
   po::options_description general_opt("Allowed options are: ");
- general_opt.add_options()
-   ("help,h", "display this message")
-   ("input,i", po::value<std::string>(), "input contour basename (without sdp extension).")
-   ("imageneDir,d", po::value<std::string>(), "specify the imagene dir.")
-   ("output,o", po::value<std::string>()->default_value("./"), "output dir (default ./).")
-   ("eps,e","set output with eps format");
+  general_opt.add_options()
+    ("help,h", "display this message")
+    ("input,i", po::value<std::string>(), "input contour basename (without sdp extension).")
+    ("imageneDir,d", po::value<std::string>(), "specify the imagene dir.")
+    ("sourceImageWidth", po::value<unsigned int>(), "source image width")
+    ("sourceImageHeight", po::value<unsigned int>(), "source image height")
+    ("output,o", po::value<std::string>()->default_value("./"), "output dir (default ./).")
+    ("version,v", "display the version num")
+    ("eps,e","set output with eps format");
 
   
   bool parseOK=true;
@@ -40,6 +35,11 @@ int main(int argc, char *const *argv)
     trace.info()<< "Error checking program options: "<< ex.what()<< std::endl;
     parseOK=false;
   }
+  if(vm.count("version")){
+    trace.info() << "version: " << version << std::endl;
+    return 0;
+  }
+  
   po::notify(vm);
   if(vm.count("help")||argc<=1|| !parseOK || !vm.count("input") || !vm.count("imageneDir"))
     {
@@ -49,9 +49,16 @@ int main(int argc, char *const *argv)
     }
   
   bool eps = vm.count("eps");
+  bool displayImageCanvas = vm.count("sourceImageWidth") && vm.count("sourceImageHeight");
+  
+  unsigned int widthCanvas, heightCanvas = 0;
+  if (displayImageCanvas){
+    widthCanvas = vm["sourceImageWidth"].as<unsigned int>();
+    heightCanvas  = vm["sourceImageHeight"].as<unsigned int>();
+  }
+  
 
-
-    /********** read data ***************/
+  /********** read data ***************/
   stringstream fileContour;
   string baseInputName  = vm["input"].as<std::string>(); 
   string outDir  = vm["output"].as<std::string>(); 
@@ -109,7 +116,7 @@ int main(int argc, char *const *argv)
      stringstream fileColorMT; 
      fileColorMT << outDir << "/"<< singleName  << (eps ? "_Color.eps" :"_Color.svg");
 
-     drawMeaningfulValue(aContour,vecMT, fileColorMT.str().c_str());
+     drawMeaningfulValue(aContour,vecMT, fileColorMT.str().c_str(), widthCanvas, heightCanvas);
 
 
 
@@ -127,7 +134,8 @@ int main(int argc, char *const *argv)
     fileAdaptMT << outDir<< "/"<< singleName<< "ATC";
     bool verbose = false;
 
-    adaptiveTangentCover = testAdaptiveTangentCover(aContour,vecMT,fileAdaptMT.str().c_str(), (eps? "eps": "svg"), verbose);
+    adaptiveTangentCover = testAdaptiveTangentCover(aContour,vecMT,fileAdaptMT.str().c_str(), (eps? "eps": "svg"), 
+                                                    verbose, widthCanvas, heightCanvas);
     /******** Adaptive tangent cover ***********/
 
 
@@ -142,7 +150,7 @@ int main(int argc, char *const *argv)
 
      cout<<"======= ATC ========";
      DP = testDominantPointOnShape(adaptiveTangentCover,aContour,
-                                   isSymmetry,isClosed,filenameDP.str().c_str(),verbose);
+                                   isSymmetry,isClosed,filenameDP.str().c_str(),verbose, widthCanvas,heightCanvas);
      cout<<endl<<"===> Num of dominant points is "<<DP.size()<<endl;
 
      //Find index of DP on the curve
@@ -166,7 +174,8 @@ int main(int argc, char *const *argv)
     stringstream filenameDPnew;
     filenameDPnew << outDir<< "/" << singleName << (eps? "_DPnew.eps":"_DPnew.svg");
     vector<Point> newDP = testDominantPointSelectionV2(DP,indexDP,aContour,
-                                                       isClosed,filenameDPnew.str().c_str(),verbose); // ISE * ANGLE
+                                                       isClosed,filenameDPnew.str().c_str(),verbose, 
+                                                       widthCanvas, heightCanvas); // ISE * ANGLE
     cout<<"===> New num of dominant points is "<<newDP.size()<<endl;
 
     vector<int> indexNewDP;
@@ -188,14 +197,14 @@ int main(int argc, char *const *argv)
 
     cout<<"======= Mid ========";
     double thickness = glNoise;
-    vector<AlphaThickSegmentComputer2D> fuzzySegmentSetMid = blurredSegmentCurveDecomposition(aContour,thickness,NULL,false);
+    vector<AlphaThickSegmentComputer2D> fuzzySegmentSetMid = blurredSegmentCurveDecomposition(aContour,thickness,NULL,false, widthCanvas, heightCanvas);
     vector<Point> DPM;
     stringstream filenameDPM;
     filenameDPM << outDir << "/" << singleName  << (eps?"_DPM.eps" :"_DPM.svg");
    
     //cout<<"===> Num of seg decomposed is "<<fuzzySegmentSetMid.size()<<endl;
     DPM = testDominantPointOnShape(fuzzySegmentSetMid,aContour,isSymmetry,isClosed,
-                                   filenameDPM.str().c_str(),verbose);
+                                   filenameDPM.str().c_str(),verbose, widthCanvas, heightCanvas);
     cout<<endl<<"===> Num of dominant points is "<<DPM.size()<<endl;
 
     //Find index of DP on the curve
@@ -215,12 +224,11 @@ int main(int argc, char *const *argv)
     // /******** Dominant point detection with the adaptive tangent cover cover ******/
 
     /********** Selection of dominant points ***************/
-    
     stringstream filenameDPnewV;
     filenameDPnewV << outDir << "/" << singleName << (eps? "_DPnewV.eps":"_DPnewV.svg");
 
     vector<Point> newDPM = testDominantPointSelectionV2(DPM,indexDPM,aContour,isClosed,
-                                                        filenameDPnewV.str().c_str(),verbose); // ISE * ANGLE
+                                                        filenameDPnewV.str().c_str(),verbose, widthCanvas, heightCanvas); // ISE * ANGLE
 
     cout<<"===> New num of dominant points is "<<newDPM.size()<<endl;
     vector<int> indexNewDPM;

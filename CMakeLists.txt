@@ -1,4 +1,4 @@
-project(testCircleDecomposition)
+project(testMultiScaleDominantPoint)
 cmake_minimum_required(VERSION 2.8)
 
 #Required in DGtal
@@ -20,4 +20,4 @@ if ( Boost_FOUND )
 
 aux_source_directory(. SRC_LIST)
 add_executable(${PROJECT_NAME} ${SRC_LIST})
-TARGET_LINK_LIBRARIES(testCircleDecomposition ${DGTAL_LIBRARIES} ${DGtalToolsLibDependencies})
+TARGET_LINK_LIBRARIES(testMultiScaleDominantPoint ${DGTAL_LIBRARIES} ${DGtalToolsLibDependencies})
