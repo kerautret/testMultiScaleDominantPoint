@@ -25,6 +25,7 @@ int main(int argc, char *const *argv)
     ("output,o", po::value<std::string>()->default_value("./"), "output dir (default ./).")
     ("verbose", "show algorithm verbose information.")
     ("version,v", "display the version num")
+    ("maxScale,m",  po::value<double>()->default_value(10.0), "change the maxScale of the meaningfulthickness (default 10.0)")
     ("eps,e","set output with eps format");
 
   
@@ -51,7 +52,7 @@ int main(int argc, char *const *argv)
   
   bool eps = vm.count("eps");
   bool displayImageCanvas = vm.count("sourceImageWidth") && vm.count("sourceImageHeight");
-  
+  double maxScale  = vm["maxScale"].as<double>();
   unsigned int widthCanvas, heightCanvas = 0;
   if (displayImageCanvas){
     widthCanvas = vm["sourceImageWidth"].as<unsigned int>();
@@ -107,7 +108,9 @@ int main(int argc, char *const *argv)
      smoothContourFile << outDir << "/"<< singleName << "SmoothContour.txt";
      instruction << ImaGeneDIR << "/build/tests/TestCompNoiseDetect/displayNoiseBS -srcPolygon " << fileContour.str() 
                  << " 0 1 CLOSED -exportNoiseLevel "<< noiseLevelMTFile.str() 
-                 << " -displaySmoothContour " << smoothContourFile.str()  ;
+                 << " -setSampling " << maxScale << " 1.0 "
+                 << " -displaySmoothContour " << smoothContourFile.str() ;
+                 
      std::system(instruction.str().c_str());
      //read file
      vector<double> vecMT = readMeanindfulThicknessFile(noiseLevelMTFile.str().c_str());//*sqrt(2)
