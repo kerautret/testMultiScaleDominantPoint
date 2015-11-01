@@ -9,7 +9,7 @@
 
 namespace po = boost::program_options;
 using namespace std;
-const std::string version = "1.0.1";
+const std::string version = "1.0.2";
 
 
 
@@ -23,6 +23,7 @@ int main(int argc, char *const *argv)
     ("sourceImageWidth", po::value<unsigned int>(), "source image width")
     ("sourceImageHeight", po::value<unsigned int>(), "source image height")
     ("output,o", po::value<std::string>()->default_value("./"), "output dir (default ./).")
+    ("verbose", "show algorithm verbose information.")
     ("version,v", "display the version num")
     ("eps,e","set output with eps format");
 
@@ -132,7 +133,7 @@ int main(int argc, char *const *argv)
     vector<AlphaThickSegmentComputer2D> adaptiveTangentCover;
     stringstream fileAdaptMT;
     fileAdaptMT << outDir<< "/"<< singleName<< "ATC";
-    bool verbose = false;
+    bool verbose = vm.count("noverbose");
 
     adaptiveTangentCover = testAdaptiveTangentCover(aContour,vecMT,fileAdaptMT.str().c_str(), (eps? "eps": "svg"), 
                                                     verbose, widthCanvas, heightCanvas);
